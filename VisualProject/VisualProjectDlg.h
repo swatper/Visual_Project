@@ -57,4 +57,5 @@ public:
 	Player player2;
 	bool playerTurn;	//true = 플레이어 1, false = 플레이어 2 차례
 
+	afx_msg void OnBnClickedGameStart();
 };

@@ -74,6 +74,7 @@ BEGIN_MESSAGE_MAP(CVisualProjectDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_OPEN_ROOM, &CVisualProjectDlg::OnBnClickedOpenRoom)
 	ON_BN_CLICKED(IDC_CONNECT_ROOM, &CVisualProjectDlg::OnBnClickedConnectRoom)
 	ON_BN_CLICKED(IDC_DICE_ROLL, &CVisualProjectDlg::OnBnClickedDiceRoll)
+	ON_BN_CLICKED(IDC_GAME_START, &CVisualProjectDlg::OnBnClickedGameStart)
 END_MESSAGE_MAP()
 
 
@@ -120,12 +121,15 @@ BOOL CVisualProjectDlg::OnInitDialog()
 	if (LogIn.Login_Success == TRUE) {
 		if (LogIn.User_Type == 0) {	//방장으로 접속
 			GetDlgItem(IDC_CONNECT_ROOM)->EnableWindow(FALSE);
+			GetDlgItem(IDC_DICE_ROLL)->EnableWindow(FALSE);
 			User_Type = 0;
 			Serv_Socket.SetParent(this);
 			Client_Socket.SetParent(this);
 		}
 		else {				//유저(?)로 접속
 			GetDlgItem(IDC_OPEN_ROOM)->EnableWindow(FALSE);
+			GetDlgItem(IDC_GAME_START)->EnableWindow(FALSE);
+			GetDlgItem(IDC_DICE_ROLL)->EnableWindow(FALSE);
 			User_Type = 1;
 			Client_Socket.SetParent(this);
 			Client_Socket.Create();
@@ -354,4 +358,13 @@ void CVisualProjectDlg::OnBnClickedDiceRoll()
 	playerTurn = !playerTurn;
 
 	Invalidate();
+}
+
+
+void CVisualProjectDlg::OnBnClickedGameStart()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	GetDlgItem(IDC_DICE_ROLL)->EnableWindow(TRUE);
+	GetDlgItem(IDC_GAME_START)->EnableWindow(FALSE);
+
 }

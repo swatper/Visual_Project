@@ -19,6 +19,8 @@
 #define IDC_CONNECT_ROOM                1007
 #define IDC_PLAYER_LIST                 1008
 #define IDC_DICE_ROLL                   1009
+#define IDC_BUTTON1                     1010
+#define IDC_GAME_START                  1010
 
 // Next default values for new objects
 // 
@@ -26,7 +28,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        132
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1010
+#define _APS_NEXT_CONTROL_VALUE         1011
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
