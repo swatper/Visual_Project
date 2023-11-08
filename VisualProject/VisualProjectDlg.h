@@ -5,8 +5,12 @@
 #pragma once
 #include "CMySocket.h"
 #include "LOGIN_DIALOG.h"
+#include "Blocks.h"
+#include "Player.h"
 #include <stdlib.h>
 #include <time.h>
+
+#define BOARDSIZE 47
 
 // CVisualProjectDlg 대화 상자
 class CVisualProjectDlg : public CDialogEx
@@ -48,4 +52,9 @@ public:
 	afx_msg void OnBnClickedConnectRoom();
 	CListBox Player_List;
 	afx_msg void OnBnClickedDiceRoll();
+	Blocks* board = new Blocks[BOARDSIZE];
+	Player player1;
+	Player player2;
+	bool playerTurn;	//true = 플레이어 1, false = 플레이어 2 차례
+
 };

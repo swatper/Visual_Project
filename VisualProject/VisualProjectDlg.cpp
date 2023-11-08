@@ -135,6 +135,30 @@ BOOL CVisualProjectDlg::OnInitDialog()
 	else {
 		OnOK();
 	}
+
+	//맵 그리기
+	int ver = 1;
+	int hor = 1;
+	int v = 1;
+	for (int i = 0; i < BOARDSIZE; i++) {
+		if (ver > 11 || ver <= 0) {
+			v *= -1;
+			ver += v;
+			hor++;
+			board[i].setCord(50 * (ver), 50 * hor);
+			hor++;
+		}
+		else {
+			board[i].setCord(50 * (ver), 50 * hor);
+			ver += v;
+		}
+	}
+
+	//플레이어 초기 설정
+	player1.SetI(0);
+	player2.SetI(0);
+	playerTurn = true; //1번 플레이어 먼저
+
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
@@ -177,6 +201,45 @@ void CVisualProjectDlg::OnPaint()
 	else
 	{
 		CDialogEx::OnPaint();
+		CClientDC dc(this);
+
+		CBrush brush, * oldBrush;
+		
+		int r = 10;
+		int pedding = 25;
+		for (int i = 0; i < BOARDSIZE; i++) {
+			int xPos = board[i].getX();
+			int yPos = board[i].getY();
+			if (i == 0) {
+				brush.CreateSolidBrush(RGB(255, 0, 0));
+				oldBrush = dc.SelectObject(&brush);
+			}
+			else if (i == BOARDSIZE - 1) {
+				brush.CreateSolidBrush(RGB(0, 255, 0));
+				oldBrush = dc.SelectObject(&brush);
+			}
+			else {
+				brush.CreateSolidBrush(RGB(204, 201, 231));
+				oldBrush = dc.SelectObject(&brush);
+			}
+			
+			dc.Rectangle(xPos + pedding, yPos + pedding, xPos - pedding, yPos - pedding);
+			if (player1.getI() == i) {
+				brush.CreateSolidBrush(RGB(255, 204, 0));
+				dc.SelectObject(&brush);
+				dc.Ellipse(xPos + r, yPos + r, xPos - r, yPos - r);
+				dc.SelectObject(oldBrush);
+			}
+			if (player2.getI() == i) {
+				brush.CreateSolidBrush(RGB(51, 255, 255));
+				dc.SelectObject(&brush);
+				dc.Rectangle(xPos + r, yPos + r, xPos - r, yPos - r);
+				dc.SelectObject(oldBrush);
+			}
+		}
+
+		dc.SelectObject(oldBrush);
+		brush.DeleteObject();
 	}
 }
 
@@ -240,19 +303,43 @@ void CVisualProjectDlg::OnBnClickedDiceRoll()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	int dice_num;
 	dice_num = rand() % 6 + 1;
+
+	if (playerTurn) {
+		player1.SetI(player1.getI() + dice_num);
+		if (player1.getI() >= BOARDSIZE) {
+			player1.SetI(BOARDSIZE - 1);
+		}
+	}
+	else {
+		player2.SetI(player2.getI() + dice_num);
+		if (player2.getI() >= BOARDSIZE) {
+			player2.SetI(BOARDSIZE - 1);
+		}
+	}
+
 	//비트맵 불러오기
 	switch (dice_num) {
 	case 1:
+		MessageBox(_T("1"));
 		break;
 	case 2:
+		MessageBox(_T("2"));
 		break;
 	case 3:
+		MessageBox(_T("3"));
 		break;
 	case 4:
+		MessageBox(_T("4"));
 		break;
 	case 5:
+		MessageBox(_T("5"));
 		break;
 	case 6:
+		MessageBox(_T("6"));
 		break;
 	}
+
+	playerTurn = !playerTurn;
+
+	Invalidate();
 }
