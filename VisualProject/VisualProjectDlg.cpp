@@ -100,7 +100,26 @@ BOOL CVisualProjectDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	//로그인 Dialong 실행
+	LOGIN_DIALOG LogIn;
+	LogIn.DoModal();
+	//로그인 성공(접속 버튼)시에만 실행
+	if (LogIn.Login_Success == TRUE) {
+		//닉네임 가져오기
+		Get_Name = LogIn.Set_Name;
+		//방장으로 접속
+		if (LogIn.User_Type == 0) {
 
+		}
+		//유저(?)로 접속
+		else {
+
+		}
+		MessageBox(Get_Name + _T("님 환영합니다. "));
+	}
+	else {
+		OnOK();
+	}
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
@@ -153,3 +172,19 @@ HCURSOR CVisualProjectDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+//소켓 관련 코드
+void CVisualProjectDlg::OnAccept() {
+
+}
+void CVisualProjectDlg::OnConnect() {
+
+}
+void CVisualProjectDlg::OnClose() {
+
+}
+void CVisualProjectDlg::OnReceive() {
+
+}
+void CVisualProjectDlg::OnSend() {
+
+}

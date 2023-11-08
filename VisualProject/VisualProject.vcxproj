@@ -183,7 +183,9 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CMySocket.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="LOGIN_DIALOG.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -191,6 +193,8 @@
     <ClInclude Include="VisualProjectDlg.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CMySocket.cpp" />
+    <ClCompile Include="LOGIN_DIALOG.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -2,9 +2,9 @@
 //
 
 #include "pch.h"
-#include "Network1.h"
+#include "VisualProject.h"
 #include "CMySocket.h"
-#include "Network1Dlg.h"
+#include "VisualProjectDlg.h"
 
 // CMySocket
 
@@ -26,29 +26,29 @@ void CMySocket::SetParent(CDialog* pWnd)
 void CMySocket::OnAccept(int nErrorCode)
 {
 	if (nErrorCode == 0)
-		((CNetwork1Dlg*)m_pWnd)->OnAccept();
+		((CVisualProjectDlg*)m_pWnd)->OnAccept();
 }
 
 void CMySocket::OnConnect(int nErrorCode)
 {
 	if (nErrorCode == 0)
-		((CNetwork1Dlg*)m_pWnd)->OnConnect();
+		((CVisualProjectDlg*)m_pWnd)->OnConnect();
 }
 
 void CMySocket::OnReceive(int nErrorCode)
 {
 	if (nErrorCode == 0)
-		((CNetwork1Dlg*)m_pWnd)->OnReceive();
+		((CVisualProjectDlg*)m_pWnd)->OnReceive();
 }
 
 void CMySocket::OnClose(int nErrorCode)
 {
 	if (nErrorCode == 0)
-		((CNetwork1Dlg*)m_pWnd)->OnClose();
+		((CVisualProjectDlg*)m_pWnd)->OnClose();
 }
 
 void CMySocket::OnSend(int nErrorCode)
 {
 	if (nErrorCode == 0)
-		((CNetwork1Dlg*)m_pWnd)->OnSend();
+		((CVisualProjectDlg*)m_pWnd)->OnSend();
 }
