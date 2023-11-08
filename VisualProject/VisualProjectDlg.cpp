@@ -354,9 +354,8 @@ void CVisualProjectDlg::OnBnClickedDiceRoll()
 			player2.SetI(0);
 		}
 	}
-
 	playerTurn = !playerTurn;
-
+	//GetDlgItem(IDC_DICE_ROLL)->EnableWindow(FALSE); //이거 지우면 혼자서 게임 가능
 	Invalidate();
 }
 
@@ -366,5 +365,4 @@ void CVisualProjectDlg::OnBnClickedGameStart()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	GetDlgItem(IDC_DICE_ROLL)->EnableWindow(TRUE);
 	GetDlgItem(IDC_GAME_START)->EnableWindow(FALSE);
-
 }
