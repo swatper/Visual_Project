@@ -52,6 +52,8 @@ END_MESSAGE_MAP()
 
 CVisualProjectDlg::CVisualProjectDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_VISUALPROJECT_DIALOG, pParent)
+	, Get_Name(_T(""))
+	, Serv_Address(_T("localhost"))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -59,6 +61,8 @@ CVisualProjectDlg::CVisualProjectDlg(CWnd* pParent /*=nullptr*/)
 void CVisualProjectDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Text(pDX, IDC_EDIT1, Get_Name);
+	DDX_Text(pDX, IDC_SET_ADDRESS, Serv_Address);
 }
 
 BEGIN_MESSAGE_MAP(CVisualProjectDlg, CDialogEx)
@@ -103,17 +107,21 @@ BOOL CVisualProjectDlg::OnInitDialog()
 	//로그인 Dialong 실행
 	LOGIN_DIALOG LogIn;
 	LogIn.DoModal();
+	UpdateData(TRUE);
+	Get_Name = LogIn.Set_Name;		//닉네임 가져오기
+	UpdateData(FALSE);
 	//로그인 성공(접속 버튼)시에만 실행
 	if (LogIn.Login_Success == TRUE) {
-		//닉네임 가져오기
-		Get_Name = LogIn.Set_Name;
-		//방장으로 접속
-		if (LogIn.User_Type == 0) {
-
+		if (LogIn.User_Type == 0) {	//방장으로 접속
+			User_Type = 0;
+			Serv_Socket.SetParent(this);
+			Client_Socket.SetParent(this);
+			Serv_Socket.Create(4000); //포트 생성
 		}
-		//유저(?)로 접속
-		else {
-
+		else {				//유저(?)로 접속
+			User_Type = 1;
+			Client_Socket.SetParent(this);
+			Client_Socket.Create();
 		}
 		MessageBox(Get_Name + _T("님 환영합니다. "));
 	}

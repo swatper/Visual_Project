@@ -33,7 +33,7 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
-	int User_Type = 0;					  //유저 유형: 방장 | 유저
+	int User_Type = -1;					  //유저 유형: 방장 | 유저
 	CString Get_Name;					  //유저 이름 (로그인 Dialong에서 가져옴)
 	CMySocket Serv_Socket, Client_Socket; //소켓 생성
 	void OnAccept();
@@ -41,4 +41,5 @@ public:
 	void OnClose();
 	void OnReceive();
 	void OnSend();
+	CString Serv_Address;
 };
