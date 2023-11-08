@@ -187,20 +187,28 @@ HCURSOR CVisualProjectDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-//소켓 관련 코드
+//-----------------------------------------------소켓 관련 코드
 void CVisualProjectDlg::OnAccept() {
 	Serv_Socket.Accept(Client_Socket);
-
+	//리스트박스에 플레이어 이름 추가
+	char* pBuf = new char[1025];
+	int iBufsize = 1024;
+	Client_Socket.Receive((void*)pBuf, iBufsize);
+	Player_List.AddString((LPCTSTR)pBuf);
 }
+
 void CVisualProjectDlg::OnConnect() {
 
 }
+
 void CVisualProjectDlg::OnClose() {
 
 }
+
 void CVisualProjectDlg::OnReceive() {
 
 }
+
 void CVisualProjectDlg::OnSend() {
 
 }
@@ -211,15 +219,19 @@ void CVisualProjectDlg::OnBnClickedOpenRoom()
 	Serv_Socket.Create(4000); //포트 생성
 	Serv_Socket.Listen();
 }
-
 //방 들어가기
 void CVisualProjectDlg::OnBnClickedConnectRoom()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	UpdateData(TRUE);
 	UpdateData(FALSE);
+	//서버(?)열기
 	Client_Socket.Connect(Serv_Address, 4000);
-	
+	//닉네임 보내기
+	int Name_length = Get_Name.GetLength() + 8;
+	char* SendName = new char[Name_length];
+	memcpy(SendName, (char*)(LPCTSTR)Get_Name, Name_length);
+	Client_Socket.Send((void*)SendName, Name_length);
 }
 
 //주사위 굴리기
@@ -243,6 +255,4 @@ void CVisualProjectDlg::OnBnClickedDiceRoll()
 	case 6:
 		break;
 	}
-
-
 }

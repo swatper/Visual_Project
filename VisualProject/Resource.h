@@ -18,7 +18,6 @@
 #define IDC_OPEN_ROOM                   1006
 #define IDC_CONNECT_ROOM                1007
 #define IDC_PLAYER_LIST                 1008
-#define IDC_BUTTON3                     1009
 #define IDC_DICE_ROLL                   1009
 
 // Next default values for new objects
