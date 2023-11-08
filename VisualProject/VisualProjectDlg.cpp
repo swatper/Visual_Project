@@ -218,6 +218,10 @@ void CVisualProjectDlg::OnPaint()
 				brush.CreateSolidBrush(RGB(0, 255, 0));
 				oldBrush = dc.SelectObject(&brush);
 			}
+			else if (i == BOARDSIZE - 2) {
+				brush.CreateSolidBrush(RGB(200, 0, 0));
+				oldBrush = dc.SelectObject(&brush);
+			}
 			else {
 				brush.CreateSolidBrush(RGB(204, 201, 231));
 				oldBrush = dc.SelectObject(&brush);
@@ -227,13 +231,13 @@ void CVisualProjectDlg::OnPaint()
 			if (player1.getI() == i) {
 				brush.CreateSolidBrush(RGB(255, 204, 0));
 				dc.SelectObject(&brush);
-				dc.Ellipse(xPos + r, yPos + r, xPos - r, yPos - r);
+				dc.Rectangle(xPos + r+5, yPos + r+5, xPos - (r+5), yPos - (r+5));
 				dc.SelectObject(oldBrush);
 			}
 			if (player2.getI() == i) {
 				brush.CreateSolidBrush(RGB(51, 255, 255));
 				dc.SelectObject(&brush);
-				dc.Rectangle(xPos + r, yPos + r, xPos - r, yPos - r);
+				dc.Ellipse(xPos + r, yPos + r, xPos - r, yPos - r);
 				dc.SelectObject(oldBrush);
 			}
 		}
@@ -303,20 +307,6 @@ void CVisualProjectDlg::OnBnClickedDiceRoll()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	int dice_num;
 	dice_num = rand() % 6 + 1;
-
-	if (playerTurn) {
-		player1.SetI(player1.getI() + dice_num);
-		if (player1.getI() >= BOARDSIZE) {
-			player1.SetI(BOARDSIZE - 1);
-		}
-	}
-	else {
-		player2.SetI(player2.getI() + dice_num);
-		if (player2.getI() >= BOARDSIZE) {
-			player2.SetI(BOARDSIZE - 1);
-		}
-	}
-
 	//비트맵 불러오기
 	switch (dice_num) {
 	case 1:
@@ -337,6 +327,28 @@ void CVisualProjectDlg::OnBnClickedDiceRoll()
 	case 6:
 		MessageBox(_T("6"));
 		break;
+	}
+
+	Invalidate();
+	if (playerTurn) {
+		player1.SetI(player1.getI() + dice_num);
+		if (player1.getI() >= BOARDSIZE-1) {
+			player1.SetI(BOARDSIZE - 1);
+		}
+		else if (player1.getI() == BOARDSIZE - 2) {
+			MessageBox(_T("이런!!"));
+			player1.SetI(0);
+		}
+	}
+	else {
+		player2.SetI(player2.getI() + dice_num);
+		if (player2.getI() >= BOARDSIZE-1) {
+			player2.SetI(BOARDSIZE - 1);
+		}
+		else if (player2.getI() == BOARDSIZE - 2) {
+			MessageBox(_T("이런!!"));
+			player2.SetI(0);
+		}
 	}
 
 	playerTurn = !playerTurn;
