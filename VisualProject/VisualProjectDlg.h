@@ -5,6 +5,8 @@
 #pragma once
 #include "CMySocket.h"
 #include "LOGIN_DIALOG.h"
+#include <stdlib.h>
+#include <time.h>
 
 // CVisualProjectDlg 대화 상자
 class CVisualProjectDlg : public CDialogEx
@@ -42,4 +44,8 @@ public:
 	void OnReceive();
 	void OnSend();
 	CString Serv_Address;
+	afx_msg void OnBnClickedOpenRoom();
+	afx_msg void OnBnClickedConnectRoom();
+	CListBox Player_List;
+	afx_msg void OnBnClickedDiceRoll();
 };

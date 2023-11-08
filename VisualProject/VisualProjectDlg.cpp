@@ -8,6 +8,7 @@
 #include "VisualProjectDlg.h"
 #include "afxdialogex.h"
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -63,12 +64,16 @@ void CVisualProjectDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT1, Get_Name);
 	DDX_Text(pDX, IDC_SET_ADDRESS, Serv_Address);
+	DDX_Control(pDX, IDC_PLAYER_LIST, Player_List);
 }
 
 BEGIN_MESSAGE_MAP(CVisualProjectDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_OPEN_ROOM, &CVisualProjectDlg::OnBnClickedOpenRoom)
+	ON_BN_CLICKED(IDC_CONNECT_ROOM, &CVisualProjectDlg::OnBnClickedConnectRoom)
+	ON_BN_CLICKED(IDC_DICE_ROLL, &CVisualProjectDlg::OnBnClickedDiceRoll)
 END_MESSAGE_MAP()
 
 
@@ -104,6 +109,7 @@ BOOL CVisualProjectDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	srand((unsigned)time(NULL));
 	//로그인 Dialong 실행
 	LOGIN_DIALOG LogIn;
 	LogIn.DoModal();
@@ -113,12 +119,13 @@ BOOL CVisualProjectDlg::OnInitDialog()
 	//로그인 성공(접속 버튼)시에만 실행
 	if (LogIn.Login_Success == TRUE) {
 		if (LogIn.User_Type == 0) {	//방장으로 접속
+			GetDlgItem(IDC_CONNECT_ROOM)->EnableWindow(FALSE);
 			User_Type = 0;
 			Serv_Socket.SetParent(this);
 			Client_Socket.SetParent(this);
-			Serv_Socket.Create(4000); //포트 생성
 		}
 		else {				//유저(?)로 접속
+			GetDlgItem(IDC_OPEN_ROOM)->EnableWindow(FALSE);
 			User_Type = 1;
 			Client_Socket.SetParent(this);
 			Client_Socket.Create();
@@ -182,6 +189,7 @@ HCURSOR CVisualProjectDlg::OnQueryDragIcon()
 
 //소켓 관련 코드
 void CVisualProjectDlg::OnAccept() {
+	Serv_Socket.Accept(Client_Socket);
 
 }
 void CVisualProjectDlg::OnConnect() {
@@ -194,5 +202,47 @@ void CVisualProjectDlg::OnReceive() {
 
 }
 void CVisualProjectDlg::OnSend() {
+
+}
+//방 만들기
+void CVisualProjectDlg::OnBnClickedOpenRoom()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	Serv_Socket.Create(4000); //포트 생성
+	Serv_Socket.Listen();
+}
+
+//방 들어가기
+void CVisualProjectDlg::OnBnClickedConnectRoom()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+	UpdateData(FALSE);
+	Client_Socket.Connect(Serv_Address, 4000);
+	
+}
+
+//주사위 굴리기
+void CVisualProjectDlg::OnBnClickedDiceRoll()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	int dice_num;
+	dice_num = rand() % 6 + 1;
+	//비트맵 불러오기
+	switch (dice_num) {
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	case 5:
+		break;
+	case 6:
+		break;
+	}
+
 
 }
