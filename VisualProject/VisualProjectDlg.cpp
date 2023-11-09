@@ -158,6 +158,15 @@ BOOL CVisualProjectDlg::OnInitDialog()
 		}
 	}
 
+	//특수 블록 생성
+	for (int i = 0; i < 2; i++) {
+		int specialBlock = rand() % (BOARDSIZE - 5) + 2;
+		if (board[specialBlock].getBlockType() == 0) {
+			board[specialBlock].setBlockType(1);
+		}
+	}
+
+
 	//플레이어 초기 설정
 	player1.SetI(0);
 	player2.SetI(0);
@@ -224,6 +233,10 @@ void CVisualProjectDlg::OnPaint()
 			}
 			else if (i == BOARDSIZE - 2) {
 				brush.CreateSolidBrush(RGB(200, 0, 0));
+				oldBrush = dc.SelectObject(&brush);
+			}
+			else if(board[i].getBlockType() == 1){
+				brush.CreateSolidBrush(RGB(255, 255, 0));
 				oldBrush = dc.SelectObject(&brush);
 			}
 			else {
@@ -303,6 +316,7 @@ void CVisualProjectDlg::OnBnClickedConnectRoom()
 	char* SendName = new char[Name_length];
 	memcpy(SendName, (char*)(LPCTSTR)Get_Name, Name_length);
 	Client_Socket.Send((void*)SendName, Name_length);
+	
 }
 
 //주사위 굴리기
@@ -343,6 +357,10 @@ void CVisualProjectDlg::OnBnClickedDiceRoll()
 			MessageBox(_T("이런!!"));
 			player1.SetI(0);
 		}
+		else if (board[player1.getI()].getBlockType() == 1) {
+			MessageBox(_T("특수 블럭! 랜덤 위치"));
+			player1.SetI(rand()%(BOARDSIZE-5));
+		}
 	}
 	else {
 		player2.SetI(player2.getI() + dice_num);
@@ -353,9 +371,13 @@ void CVisualProjectDlg::OnBnClickedDiceRoll()
 			MessageBox(_T("이런!!"));
 			player2.SetI(0);
 		}
+		else if (board[player2.getI()].getBlockType() == 1) {
+			MessageBox(_T("특수 블럭! 랜덤 위치"));
+			player2.SetI(rand() % (BOARDSIZE - 5));
+		}
 	}
 	playerTurn = !playerTurn;
-	GetDlgItem(IDC_DICE_ROLL)->EnableWindow(FALSE); //이거 지우면 혼자서 게임 가능
+	//GetDlgItem(IDC_DICE_ROLL)->EnableWindow(FALSE); //이거 지우면 혼자서 게임 가능
 	Invalidate();
 }
 
