@@ -6,9 +6,16 @@
 #define IDD_ABOUTBOX                    100
 #define IDS_ABOUTBOX                    101
 #define IDD_VISUALPROJECT_DIALOG        102
+#define DICE_ANIMATION                  102
 #define IDP_SOCKETS_INIT_FAILED         103
 #define IDR_MAINFRAME                   128
 #define IDD_DIA_Login                   129
+#define IDB_DICE1                       132
+#define IDB_DICE2                       133
+#define IDB_DICE3                       134
+#define IDB_DICE4                       135
+#define IDB_DICE5                       136
+#define IDB_DICE6                       137
 #define ID_EXIT                         1000
 #define IDC_EDIT_SET_NAME               1001
 #define IDC_MAKE_ROOM                   1002
@@ -26,7 +33,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        132
+#define _APS_NEXT_RESOURCE_VALUE        133
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1011
 #define _APS_NEXT_SYMED_VALUE           101

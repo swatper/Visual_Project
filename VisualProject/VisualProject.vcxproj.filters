@@ -83,5 +83,23 @@
     <Image Include="res\VisualProject.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="res\bitmap1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\dice2.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\dice3.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\dice4.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\dice5.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\dice6.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>

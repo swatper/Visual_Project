@@ -75,6 +75,7 @@ BEGIN_MESSAGE_MAP(CVisualProjectDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CONNECT_ROOM, &CVisualProjectDlg::OnBnClickedConnectRoom)
 	ON_BN_CLICKED(IDC_DICE_ROLL, &CVisualProjectDlg::OnBnClickedDiceRoll)
 	ON_BN_CLICKED(IDC_GAME_START, &CVisualProjectDlg::OnBnClickedGameStart)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -172,6 +173,10 @@ BOOL CVisualProjectDlg::OnInitDialog()
 	player2.SetI(0);
 	playerTurn = true; //1번 플레이어 먼저
 
+	//주사위
+	DICE_NUN = 0;
+	animation_count = 0;
+
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
@@ -258,9 +263,19 @@ void CVisualProjectDlg::OnPaint()
 				dc.SelectObject(oldBrush);
 			}
 		}
-
 		dc.SelectObject(oldBrush);
 		brush.DeleteObject();
+
+		CDC MemDC;
+		MemDC.CreateCompatibleDC(&dc);
+		CBitmap bitmap;
+		bitmap.LoadBitmap(DICE_NUN); //BITMAP ID
+		CBitmap* oldbitmap = MemDC.SelectObject(&bitmap);
+		//출력 좌표x, y, 폭, 넓이, 넣을 BITMAP DC, 저장한 것이 어디서 시작하는지 좌표
+		dc.BitBlt(730, 500, 48, 48, &MemDC, 0, 0, SRCCOPY);
+		dc.SelectObject(oldbitmap);
+		bitmap.DeleteObject();
+		
 	}
 }
 
@@ -323,34 +338,12 @@ void CVisualProjectDlg::OnBnClickedConnectRoom()
 void CVisualProjectDlg::OnBnClickedDiceRoll()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	int dice_num;
-	dice_num = rand() % 6 + 1;
-	//비트맵 불러오기
-	switch (dice_num) {
-	case 1:
-		MessageBox(_T("1"));
-		break;
-	case 2:
-		MessageBox(_T("2"));
-		break;
-	case 3:
-		MessageBox(_T("3"));
-		break;
-	case 4:
-		MessageBox(_T("4"));
-		break;
-	case 5:
-		MessageBox(_T("5"));
-		break;
-	case 6:
-		MessageBox(_T("6"));
-		break;
-	}
-
+	int dice_num = rand() % 6 + 1;
+	DICE_NUN = IDB_DICE1 + dice_num - 1;
 	Invalidate();
 	if (playerTurn) {
 		player1.SetI(player1.getI() + dice_num);
-		if (player1.getI() >= BOARDSIZE-1) {
+		if (player1.getI() >= BOARDSIZE - 1) {
 			player1.SetI(BOARDSIZE - 1);
 		}
 		else if (player1.getI() == BOARDSIZE - 2) {
@@ -359,12 +352,12 @@ void CVisualProjectDlg::OnBnClickedDiceRoll()
 		}
 		else if (board[player1.getI()].getBlockType() == 1) {
 			MessageBox(_T("특수 블럭! 랜덤 위치"));
-			player1.SetI(rand()%(BOARDSIZE-5));
+			player1.SetI(rand() % (BOARDSIZE - 5));
 		}
 	}
 	else {
 		player2.SetI(player2.getI() + dice_num);
-		if (player2.getI() >= BOARDSIZE-1) {
+		if (player2.getI() >= BOARDSIZE - 1) {
 			player2.SetI(BOARDSIZE - 1);
 		}
 		else if (player2.getI() == BOARDSIZE - 2) {
@@ -376,9 +369,8 @@ void CVisualProjectDlg::OnBnClickedDiceRoll()
 			player2.SetI(rand() % (BOARDSIZE - 5));
 		}
 	}
-	playerTurn = !playerTurn;
-	//GetDlgItem(IDC_DICE_ROLL)->EnableWindow(FALSE); //이거 지우면 혼자서 게임 가능
 	Invalidate();
+	playerTurn = !playerTurn;
 }
 
 
@@ -387,4 +379,10 @@ void CVisualProjectDlg::OnBnClickedGameStart()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	GetDlgItem(IDC_DICE_ROLL)->EnableWindow(TRUE);
 	GetDlgItem(IDC_GAME_START)->EnableWindow(FALSE);
+}
+
+
+void CVisualProjectDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	CDialogEx::OnTimer(nIDEvent);
 }
