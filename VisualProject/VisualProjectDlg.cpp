@@ -267,15 +267,15 @@ void CVisualProjectDlg::OnAccept() {
 	Client_Socket.Receive((void*)pBuf, iBufsize);
 	Player_List.AddString((LPCTSTR)pBuf);
 }
-
+//Connect 시도후에 OnConnect 호출
 void CVisualProjectDlg::OnConnect() {
 
 }
-
+//소켓이 닫히면 실행
 void CVisualProjectDlg::OnClose() {
 
 }
-
+//데이터를 받으면 실행
 void CVisualProjectDlg::OnReceive() {
 
 }
@@ -355,7 +355,7 @@ void CVisualProjectDlg::OnBnClickedDiceRoll()
 		}
 	}
 	playerTurn = !playerTurn;
-	//GetDlgItem(IDC_DICE_ROLL)->EnableWindow(FALSE); //이거 지우면 혼자서 게임 가능
+	GetDlgItem(IDC_DICE_ROLL)->EnableWindow(FALSE); //이거 지우면 혼자서 게임 가능
 	Invalidate();
 }
 
