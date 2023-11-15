@@ -336,41 +336,46 @@ void CVisualProjectDlg::OnBnClickedConnectRoom()
 
 //주사위 굴리기
 void CVisualProjectDlg::OnBnClickedDiceRoll()
-{
+{	// 버튼 눌러서 다이스 돌리기 -> 다시 버튼 눌러서 버튼 멈추기
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	int dice_num = rand() % 6 + 1;
-	DICE_NUN = IDB_DICE1 + dice_num - 1;
-	Invalidate();
-	if (playerTurn) {
-		player1.SetI(player1.getI() + dice_num);
-		if (player1.getI() >= BOARDSIZE - 1) {
-			player1.SetI(BOARDSIZE - 1);
+	SetTimer(1, 50, NULL); // 다이스 돌아가는 타이머
+	SetTimer(2, 500000000, NULL); // 10초 동안 다시 안누르면 강제로 다이스 멈춤
+	dice_on++; 
+	if (dice_on == 2) {
+		if (playerTurn) {
+			player1.SetI(player1.getI() + dice_num);
+			if (player1.getI() >= BOARDSIZE - 1) {
+				player1.SetI(BOARDSIZE - 1);
+			}
+			else if (player1.getI() == BOARDSIZE - 2) {
+				MessageBox(_T("이런!!"));
+				player1.SetI(0);
+			}
+			else if (board[player1.getI()].getBlockType() == 1) {
+				MessageBox(_T("특수 블럭! 랜덤 위치"));
+				player1.SetI(rand() % (BOARDSIZE - 5));
+			}
 		}
-		else if (player1.getI() == BOARDSIZE - 2) {
-			MessageBox(_T("이런!!"));
-			player1.SetI(0);
+		else {
+			player2.SetI(player2.getI() + dice_num);
+			if (player2.getI() >= BOARDSIZE - 1) {
+				player2.SetI(BOARDSIZE - 1);
+			}
+			else if (player2.getI() == BOARDSIZE - 2) {
+				MessageBox(_T("이런!!"));
+				player2.SetI(0);
+			}
+			else if (board[player2.getI()].getBlockType() == 1) {
+				MessageBox(_T("특수 블럭! 랜덤 위치"));
+				player2.SetI(rand() % (BOARDSIZE - 5));
+			}
 		}
-		else if (board[player1.getI()].getBlockType() == 1) {
-			MessageBox(_T("특수 블럭! 랜덤 위치"));
-			player1.SetI(rand() % (BOARDSIZE - 5));
-		}
+		Invalidate();
+		playerTurn = !playerTurn;
+		dice_on = 0;
+		KillTimer(1);
+		KillTimer(2);
 	}
-	else {
-		player2.SetI(player2.getI() + dice_num);
-		if (player2.getI() >= BOARDSIZE - 1) {
-			player2.SetI(BOARDSIZE - 1);
-		}
-		else if (player2.getI() == BOARDSIZE - 2) {
-			MessageBox(_T("이런!!"));
-			player2.SetI(0);
-		}
-		else if (board[player2.getI()].getBlockType() == 1) {
-			MessageBox(_T("특수 블럭! 랜덤 위치"));
-			player2.SetI(rand() % (BOARDSIZE - 5));
-		}
-	}
-	Invalidate();
-	playerTurn = !playerTurn;
 }
 
 
@@ -384,5 +389,52 @@ void CVisualProjectDlg::OnBnClickedGameStart()
 
 void CVisualProjectDlg::OnTimer(UINT_PTR nIDEvent)
 {
+	switch (nIDEvent)
+	{
+	case 1:
+		Dice_Timer++;
+		if (Dice_Timer == 7)
+			Dice_Timer = 1;
+		dice_num = Dice_Timer;
+		DICE_NUN = IDB_DICE1 + dice_num - 1;
+		Invalidate();
+		break;
+	case 2:
+		if (playerTurn) {
+			player1.SetI(player1.getI() + dice_num);
+			if (player1.getI() >= BOARDSIZE - 1) {
+				player1.SetI(BOARDSIZE - 1);
+			}
+			else if (player1.getI() == BOARDSIZE - 2) {
+				MessageBox(_T("이런!!"));
+				player1.SetI(0);
+			}
+			else if (board[player1.getI()].getBlockType() == 1) {
+				MessageBox(_T("특수 블럭! 랜덤 위치"));
+				player1.SetI(rand() % (BOARDSIZE - 5));
+			}
+		}
+		else {
+			player2.SetI(player2.getI() + dice_num);
+			if (player2.getI() >= BOARDSIZE - 1) {
+				player2.SetI(BOARDSIZE - 1);
+			}
+			else if (player2.getI() == BOARDSIZE - 2) {
+				MessageBox(_T("이런!!"));
+				player2.SetI(0);
+			}
+			else if (board[player2.getI()].getBlockType() == 1) {
+				MessageBox(_T("특수 블럭! 랜덤 위치"));
+				player2.SetI(rand() % (BOARDSIZE - 5));
+			}
+		}
+		Invalidate();
+		dice_on=0;
+		playerTurn = !playerTurn;
+		KillTimer(1);
+		KillTimer(2);
+		break;
+	}
 	CDialogEx::OnTimer(nIDEvent);
 }
+

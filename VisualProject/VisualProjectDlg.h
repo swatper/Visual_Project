@@ -61,4 +61,7 @@ public:
 	int DICE_NUN;
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	int animation_count;
+	int Dice_Timer = 0;
+	int dice_num = 0;
+	int dice_on = 0;
 };
