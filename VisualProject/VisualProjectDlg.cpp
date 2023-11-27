@@ -320,7 +320,12 @@ void CVisualProjectDlg::OnReceive() {
 		}
 		//주사위 숫자 입력 받기 (상대방꺼 움직이기)
 		if (int diceNum = atoi(pBuf)) { //pBuf에 내용을 숫자로 변환 (문자부터 들어오면 0임)
-		
+			if (User_Type == 0) { //방장이 상대방 말 위치 값 받을 때
+				//player2;
+			}
+			else {//상대방이 방장 말 위치 값 받을 떄
+				//player1;
+			}
 		} 
 		//문자 주고 받기
 	}
