@@ -294,6 +294,7 @@ void CVisualProjectDlg::OnAccept() {
 	int iBufsize = 1024;
 	Client_Socket.Receive((void*)pBuf, iBufsize);
 	Player_List.AddString((LPCTSTR)pBuf);
+	MessageBox((LPCTSTR)pBuf); //누가 들어왔는지 확인
 }
 //Connect 시도후에 OnConnect 호출
 void CVisualProjectDlg::OnConnect() {
@@ -301,11 +302,23 @@ void CVisualProjectDlg::OnConnect() {
 }
 //소켓이 닫히면 실행
 void CVisualProjectDlg::OnClose() {
-
+	MessageBox(_T("게임을 종료합니다. "));
 }
 //데이터를 받으면 실행
 void CVisualProjectDlg::OnReceive() {
-
+	char* pBuf = new char[1025];
+	int iBufSize = 1024;
+	int iRcvd;
+	iRcvd = Client_Socket.Receive((void*)pBuf, iBufSize);
+	if (iRcvd == SOCKET_ERROR) {}
+	else{
+		//주사위 숫자 입력 받기 (상대방꺼 움직이기)
+		if (int diceNum = atoi(pBuf)) { //pBuf에 내용을 숫자로 변환 (문자부터 들어오면 0임)
+		
+		} 
+		//문자 주고 받기
+	}
+	delete[] pBuf;
 }
 
 void CVisualProjectDlg::OnSend() {
@@ -370,6 +383,8 @@ void CVisualProjectDlg::OnBnClickedDiceRoll()
 		}
 	}
 	Invalidate();
+	//주사위 값 넘겨주기
+
 	playerTurn = !playerTurn;
 }
 
