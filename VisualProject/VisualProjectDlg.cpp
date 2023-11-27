@@ -171,7 +171,7 @@ BOOL CVisualProjectDlg::OnInitDialog()
 	//플레이어 초기 설정
 	player1.SetI(0);
 	player2.SetI(0);
-	playerTurn = true; //1번 플레이어 먼저
+	player1.Player_Turn = TRUE; //1번 플레이어 먼저
 
 	//주사위
 	DICE_NUN = 0;
@@ -312,6 +312,12 @@ void CVisualProjectDlg::OnReceive() {
 	iRcvd = Client_Socket.Receive((void*)pBuf, iBufSize);
 	if (iRcvd == SOCKET_ERROR) {}
 	else{
+		//각자 턴 진행
+		if (strcmp(pBuf, "Turn")) {
+			player1.Player_Turn = TRUE;
+			player2.Player_Turn = TRUE;
+			GetDlgItem(IDC_DICE_ROLL)->EnableWindow(TRUE);
+		}
 		//주사위 숫자 입력 받기 (상대방꺼 움직이기)
 		if (int diceNum = atoi(pBuf)) { //pBuf에 내용을 숫자로 변환 (문자부터 들어오면 0임)
 		
@@ -354,7 +360,7 @@ void CVisualProjectDlg::OnBnClickedDiceRoll()
 	int dice_num = rand() % 6 + 1;
 	DICE_NUN = IDB_DICE1 + dice_num - 1;
 	Invalidate();
-	if (playerTurn) {
+	if (User_Type == 0 && player1.Player_Turn == TRUE) { //방장 턴
 		player1.SetI(player1.getI() + dice_num);
 		if (player1.getI() >= BOARDSIZE - 1) {
 			player1.SetI(BOARDSIZE - 1);
@@ -367,8 +373,9 @@ void CVisualProjectDlg::OnBnClickedDiceRoll()
 			MessageBox(_T("특수 블럭! 랜덤 위치"));
 			player1.SetI(rand() % (BOARDSIZE - 5));
 		}
+		GetDlgItem(IDC_DICE_ROLL)->EnableWindow(FALSE);
 	}
-	else {
+	else if (User_Type == 1 && player2.Player_Turn == TRUE){ //상대방 턴
 		player2.SetI(player2.getI() + dice_num);
 		if (player2.getI() >= BOARDSIZE - 1) {
 			player2.SetI(BOARDSIZE - 1);
@@ -381,18 +388,25 @@ void CVisualProjectDlg::OnBnClickedDiceRoll()
 			MessageBox(_T("특수 블럭! 랜덤 위치"));
 			player2.SetI(rand() % (BOARDSIZE - 5));
 		}
+		GetDlgItem(IDC_DICE_ROLL)->EnableWindow(FALSE);
 	}
 	Invalidate();
-	//주사위 값 넘겨주기
-
-	playerTurn = !playerTurn;
+	player1.Player_Turn = FALSE;
+	player2.Player_Turn = FALSE;
+	//턴 끝났다고 알리기
+	int iSent;
+	const char* strMsg = "TURN";
+	int iLen = strlen(strMsg) + 1; //실제 문자 길이 + NULL 문자 길이
+	iSent = Client_Socket.Send((void*)strMsg, iLen);
 }
 
 
 void CVisualProjectDlg::OnBnClickedGameStart()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	GetDlgItem(IDC_DICE_ROLL)->EnableWindow(TRUE);
+	if (player1.Player_Turn) {
+		GetDlgItem(IDC_DICE_ROLL)->EnableWindow(TRUE);
+	}
 	GetDlgItem(IDC_GAME_START)->EnableWindow(FALSE);
 }
 

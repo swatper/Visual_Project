@@ -13,6 +13,6 @@ public:
 	int Player::getX();
 	int Player::getY();
 	int Player::getI();
-	BOOL Player_Turn;
+	BOOL Player_Turn = FALSE;
 };
 

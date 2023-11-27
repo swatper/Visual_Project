@@ -55,7 +55,6 @@ public:
 	Blocks* board = new Blocks[BOARDSIZE];
 	Player player1;
 	Player player2;
-	bool playerTurn;	//true = 플레이어 1, false = 플레이어 2 차례
 	CString Player_Num; //플레이어 번호(순서)
 	afx_msg void OnBnClickedGameStart();
 	int DICE_NUN;
